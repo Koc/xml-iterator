@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<price>
+    <category>Категория в неправильном месте</category>
+    <date>2018-05-30 07:17</date>
+    <firmName>small</firmName>
+    <firmId>000</firmId>
+    <categories>
+        <category>
+            <id>1</id>
+            <name>Смартфоны, ТВ, электроника</name>
+        </category>
+        <category>
+            <category>Эта категория тоже в неправильном месте</category>
+            <id>2</id>
+            <parentId>1</parentId>
+            <name>Телефоны</name>
+        </category>
+    </categories>
+    <items>
+        <item>
+        </item>
+    </items>
+</price>

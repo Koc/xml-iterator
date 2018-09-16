@@ -1,20 +1,35 @@
 language: php
-
 sudo: false
+cache:
+  directories:
+    - $HOME/.composer/cache/files
 
-php:
-  - 7.1
-  - 7.2
+env:
+    global:
+        - PHPUNIT_FLAGS="-v"
+
+matrix:
+    fast_finish: true
+    include:
+        - php: 7.1
+        - php: 7.2
+        - php: 7.2
+          env: GROUP=performance
+    allow_failures:
+          # Dev-master is allowed to fail.
+        - env: STABILITY="dev"
 
 before_install:
   - composer self-update
+  - |
+    if [ "$GROUP" != "" ]; then
+        PHPUNIT_FLAGS="$PHPUNIT_FLAGS --group=$GROUP"
+    fi
 
 install:
   - composer install --prefer-dist
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.clover
+  - composer validate --strict --no-check-lock
+  - vendor/bin/phpunit $PHPUNIT_FLAGS
 
-cache:
-  directories:
-    - $HOME/.composer/cache/files

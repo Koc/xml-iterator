@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<price>
+    <date>2018-05-30 07:17</date>
+    <firmName>small</firmName>
+    <firmId>000</firmId>
+    <categories>
+        <category>
+            <id>1</id>
+            <name>Смартфоны, ТВ, электроника</name>
+        </category>
+        <category>
+            <id>2</id>
+            <parentId>1</parentId>
+            <name>Телефоны</name>
+        </category>
+        <category>
+            <id>3</id>
+            <parentId>1</parentId>
+            <name>Фото</name>
+        </category>
+        <category>
+            <id>4</id>
+            <parentId>3</parentId>
+            <name>Фотоаппараты</name>
+        </category>
+        <category>
+            <id>5</id>
+            <parentId>3</parentId>
+            <name>Объективы</name>
+        </category>
+    </categories>
+    <items>
+        <item>
+            <id>0123456789</id>
+            <name>Item 0123456789</name>
+        </item>
+        <item>
+            <id>0123456789-2</id>
+            <name>Item 0123456789-2</name>
+        </item>
+    </items>
+</price>

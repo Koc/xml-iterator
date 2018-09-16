@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<price>
+    <date>2018-05-30 07:17</date>
+    <firmName>small</firmName>
+    <firmId>000</firmId>
+    <items>
+        <item>
+            <id>1</id>
+            <description>Simple description &amp;</description>
+        </item>
+        <item>
+            <id>2</id>
+            <description><![CDATA[Within this Character Data block I can
+use double dashes as much as I want (along with <, &, ', and ")
+*and* %MyParamEntity; will be expanded to the text
+"Has been expanded" ... however, I can't use
+the CEND sequence. If I need to use CEND I must escape one of the
+brackets or the greater-than sign using concatenated CDATA sections.]]></description>
+        </item>
+    </items>
+</price>
