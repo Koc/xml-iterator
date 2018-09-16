@@ -1,0 +1,46 @@
+{
+    "name": "brouzie/xml-iterator",
+    "type": "library",
+    "description": "Fast and memory efficient XML iterator based on XmlReader.",
+    "keywords": [
+        "xml-parser",
+        "xmlreader",
+        "xml-iterator"
+    ],
+    "homepage": "https://github.com/Koc/xml-iterator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Konstantin Myakshin",
+            "email": "molodchick@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "ext-dom": "*",
+        "ext-xmlreader": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brouzie\\XmlIterator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brouzie\\XmlIterator\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
