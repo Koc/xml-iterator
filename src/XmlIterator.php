@@ -6,7 +6,7 @@ use Brouzie\XmlIterator\Exception\FileParseError;
 use Brouzie\XmlIterator\Exception\LineParseError;
 use Brouzie\XmlIterator\Internal\XpathFilterIterator;
 
-final class XmlIterator
+class XmlIterator
 {
     private $iterator;
 

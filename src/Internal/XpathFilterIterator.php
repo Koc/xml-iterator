@@ -13,11 +13,11 @@ class XpathFilterIterator implements \Iterator
 {
     const DEFAILT_OPTIONS = \XMLReader::VALIDATE | \XMLReader::SUBST_ENTITIES | LIBXML_NOCDATA | LIBXML_BIGLINES;
 
-    private $position;
-
-    private $xmlFileUri;
+    private $uri;
 
     private $xpath;
+
+    private $targetElement;
 
     private $readerOptions;
 
@@ -30,10 +30,13 @@ class XpathFilterIterator implements \Iterator
      */
     private $stack;
 
+    private $position;
+
     public function __construct(string $uri, string $xpath, int $readerOptions = self::DEFAILT_OPTIONS)
     {
-        $this->xmlFileUri = $uri;
+        $this->uri = $uri;
         $this->xpath = $xpath;
+        $this->targetElement = substr($this->xpath, strrpos($this->xpath, '/') + 1);
         $this->readerOptions = $readerOptions;
 
         $this->reader = new \XMLReader();
@@ -75,7 +78,7 @@ class XpathFilterIterator implements \Iterator
 
     public function next()
     {
-        if ($this->reader->next($this->getTargetElement())) {
+        if ($this->reader->next($this->targetElement)) {
             ++$this->position;
         }
     }
@@ -87,9 +90,9 @@ class XpathFilterIterator implements \Iterator
 
     public function valid()
     {
-        return $this->stack->validateXpath($this->xpath)
-            && $this->reader->name === $this->getTargetElement()
-            && \XMLReader::ELEMENT === $this->reader->nodeType;
+        return \XMLReader::ELEMENT === $this->reader->nodeType
+            && $this->reader->name === $this->targetElement
+            && $this->stack->validateXpath($this->xpath);
     }
 
     public function rewind()
@@ -97,9 +100,9 @@ class XpathFilterIterator implements \Iterator
         $this->position = 0;
         $this->stack = new ParsedNodeStack();
 
-        if (!@$this->reader->open($this->xmlFileUri, 'UTF-8', $this->readerOptions)) {
+        if (!@$this->reader->open($this->uri, 'UTF-8', $this->readerOptions)) {
             throw new FileParseError(
-                sprintf('File "%s" cannot bet opened.', $this->xmlFileUri),
+                sprintf('File "%s" cannot bet opened.', $this->uri),
                 null
             );
         }
@@ -146,10 +149,5 @@ class XpathFilterIterator implements \Iterator
         $error = reset($errors);
 
         return $error ?: null;
-    }
-
-    private function getTargetElement(): string
-    {
-        return substr($this->xpath, strrpos($this->xpath, '/') + 1);
     }
 }
