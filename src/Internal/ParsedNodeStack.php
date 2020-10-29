@@ -20,6 +20,7 @@ class ParsedNodeStack
     public function push(\XMLReader $reader): void
     {
         $this->currentNode = new NodeInfo($reader->nodeType, $reader->name);
+        \array_splice($this->stack, $reader->depth);
         $this->stack[] = $this->currentNode;
 
         //TODO: increment counter if current element is same as prev
