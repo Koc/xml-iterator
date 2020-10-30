@@ -111,7 +111,10 @@ class XpathFilterIterator implements \Iterator
 
         // move to the first element
         while (@$this->reader->read()) {
-            if (\XMLReader::ELEMENT === $this->reader->nodeType && !$this->reader->isEmptyElement) {
+            if (
+                \XMLReader::ELEMENT === $this->reader->nodeType
+                and !$this->reader->isEmptyElement || $this->reader->hasAttributes
+            ) {
                 $this->stack->push($this->reader);
             }
 

@@ -3,6 +3,11 @@
     <date>2018-05-30 07:17</date>
     <firmName>small</firmName>
     <firmId>000</firmId>
+    <currencies>
+        <currency id="UAH" rate="1" />
+        <currency id="USD" rate="27.9"></currency>
+        <currency id="EUR" rate="32.1" />
+    </currencies>
     <categories>
         <category>
             <id>1</id>

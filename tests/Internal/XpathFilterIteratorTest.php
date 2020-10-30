@@ -29,6 +29,8 @@ class XpathFilterIteratorTest extends TestCase
 
     const XPATH_CATEGORY = '/price/categories/category';
 
+    const XPATH_CURRENCY = '/price/currencies/currency';
+
     const XPATH_ITEMS = '/price/items/item';
 
     /**
@@ -37,6 +39,7 @@ class XpathFilterIteratorTest extends TestCase
     public function testValidFile(string $path)
     {
         $iterator = new XpathFilterIterator($path, self::XPATH_CATEGORY);
+        $currentCategoryLine = 12;
 
         $iterator->rewind();
         $this->assertTrue($iterator->valid());
@@ -47,9 +50,7 @@ class XpathFilterIteratorTest extends TestCase
     <name>Смартфоны, ТВ, электроника</name>
 </category>
 XML;
-        $itemContext = $iterator->current();
-        $this->assertParseContextLine(7, $itemContext);
-        $this->assertParseContextContent($categoryXml, $itemContext);
+        $this->assertParseContext($iterator->current(), $categoryXml, $currentCategoryLine);
 
         $iterator->next();
         $this->assertTrue($iterator->valid());
@@ -61,9 +62,7 @@ XML;
     <name>Телефоны</name>
 </category>
 XML;
-        $itemContext = $iterator->current();
-        $this->assertParseContextLine(11, $itemContext);
-        $this->assertParseContextContent($categoryXml, $itemContext);
+        $this->assertParseContext($iterator->current(), $categoryXml, $currentCategoryLine += 4);
 
         $iterator->next();
         $this->assertTrue($iterator->valid());
@@ -75,9 +74,7 @@ XML;
     <name>Фото</name>
 </category>
 XML;
-        $itemContext = $iterator->current();
-        $this->assertParseContextLine(16, $itemContext);
-        $this->assertParseContextContent($categoryXml, $itemContext);
+        $this->assertParseContext($iterator->current(), $categoryXml, $currentCategoryLine += 5);
 
         $iterator->next();
         $this->assertTrue($iterator->valid());
@@ -89,9 +86,7 @@ XML;
     <name>Фотоаппараты</name>
 </category>
 XML;
-        $itemContext = $iterator->current();
-        $this->assertParseContextLine(21, $itemContext);
-        $this->assertParseContextContent($categoryXml, $itemContext);
+        $this->assertParseContext($iterator->current(), $categoryXml, $currentCategoryLine += 5);
 
         $iterator->next();
         $this->assertTrue($iterator->valid());
@@ -103,9 +98,38 @@ XML;
     <name>Объективы</name>
 </category>
 XML;
-        $itemContext = $iterator->current();
-        $this->assertParseContextLine(26, $itemContext);
-        $this->assertParseContextContent($categoryXml, $itemContext);
+        $this->assertParseContext($iterator->current(), $categoryXml, $currentCategoryLine += 5);
+
+        $iterator->next();
+        $this->assertFalse($iterator->valid());
+
+        // Currency rates
+        $iterator = new XpathFilterIterator($path, self::XPATH_CURRENCY);
+        $currentCurrencyLine = 6;
+
+        $iterator->rewind();
+        $this->assertTrue($iterator->valid());
+
+        $currencyXml = <<<'XML'
+<currency id="UAH" rate="1" />
+XML;
+        $this->assertParseContext($iterator->current(), $currencyXml, $currentCurrencyLine += 1);
+
+        $iterator->next();
+        $this->assertTrue($iterator->valid());
+
+        $currencyXml = <<<'XML'
+<currency id="USD" rate="27.9"></currency>
+XML;
+        $this->assertParseContext($iterator->current(), $currencyXml, $currentCurrencyLine += 1);
+
+        $iterator->next();
+        $this->assertTrue($iterator->valid());
+
+        $currencyXml = <<<'XML'
+<currency id="EUR" rate="32.1" />
+XML;
+        $this->assertParseContext($iterator->current(), $currencyXml, $currentCurrencyLine += 1);
 
         $iterator->next();
         $this->assertFalse($iterator->valid());
@@ -314,5 +338,11 @@ TEXT;
         $this->assertInstanceOf(\SimpleXMLElement::class, $xml);
         $this->assertXmlStringEqualsXmlString($expectedContent, $parseContext->getContext());
         $this->assertXmlStringEqualsXmlString($expectedContent, $xml->asXml());
+    }
+
+    public function assertParseContext(Context $parseContext, string $expectedContent, int $expectedLine)
+    {
+        $this->assertParseContextContent($expectedContent, $parseContext);
+        $this->assertParseContextLine($expectedLine, $parseContext);
     }
 }
