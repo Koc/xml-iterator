@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog>
+    <shop>
+        <offers>
+            <offer id="1" available="true" >
+                <price>540</price>
+                <param name="Цвет металла">Стальной</param>
+            </offer>
+            <offer id="105464" available="true" >
+                <price>3130</price>
+                <param name="Цвет металла">Красный</param>
+                <param name="Га
