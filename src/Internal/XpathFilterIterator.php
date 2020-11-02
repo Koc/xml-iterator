@@ -11,7 +11,7 @@ use Brouzie\XmlIterator\Exception\LineParseError;
  */
 class XpathFilterIterator implements \Iterator
 {
-    const DEFAILT_OPTIONS = \XMLReader::VALIDATE | \XMLReader::SUBST_ENTITIES | LIBXML_NOCDATA | LIBXML_BIGLINES;
+    const DEFAULT_OPTIONS = \XMLReader::VALIDATE | \XMLReader::SUBST_ENTITIES | LIBXML_NOCDATA | LIBXML_BIGLINES;
 
     private $uri;
 
@@ -32,7 +32,7 @@ class XpathFilterIterator implements \Iterator
 
     private $position;
 
-    public function __construct(string $uri, string $xpath, int $readerOptions = self::DEFAILT_OPTIONS)
+    public function __construct(string $uri, string $xpath, int $readerOptions = self::DEFAULT_OPTIONS)
     {
         $this->uri = $uri;
         $this->xpath = $xpath;
