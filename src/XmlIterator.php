@@ -18,7 +18,7 @@ class XmlIterator
     public static function fromUri(
         string $uri,
         string $xpath,
-        int $readerOptions = XpathFilterIterator::DEFAILT_OPTIONS
+        int $readerOptions = XpathFilterIterator::DEFAULT_OPTIONS
     ): self {
         return new self(new XpathFilterIterator($uri, $xpath, $readerOptions));
     }

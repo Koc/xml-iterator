@@ -11,7 +11,9 @@ use Brouzie\XmlIterator\Exception\LineParseError;
  */
 class XpathFilterIterator implements \Iterator
 {
-    const DEFAILT_OPTIONS = \XMLReader::VALIDATE | \XMLReader::SUBST_ENTITIES | LIBXML_NOCDATA | LIBXML_BIGLINES;
+    const DEFAULT_OPTIONS = \XMLReader::VALIDATE | \XMLReader::SUBST_ENTITIES | LIBXML_NOCDATA | LIBXML_BIGLINES;
+
+    const LINE_ERROR_LIMIT = 3;
 
     private $uri;
 
@@ -32,7 +34,11 @@ class XpathFilterIterator implements \Iterator
 
     private $position;
 
-    public function __construct(string $uri, string $xpath, int $readerOptions = self::DEFAILT_OPTIONS)
+    private $lineErrorCounts = 0;
+
+    private $lastLineError;
+
+    public function __construct(string $uri, string $xpath, int $readerOptions = self::DEFAULT_OPTIONS)
     {
         $this->uri = $uri;
         $this->xpath = $xpath;
@@ -55,13 +61,18 @@ class XpathFilterIterator implements \Iterator
 
         if (false === $node) {
             if ($error = $this->getXmlError($internalErrors)) {
+                $this->lineErrorCounts = 0;
                 //TODO: read piece of file and populate context
-                throw LineParseError::fromLibXMLError($error);
+                throw $this->lastLineError = LineParseError::fromLibXMLError($error);
             }
-
+            if (self::LINE_ERROR_LIMIT < ++$this->lineErrorCounts) {
+                throw new FileParseError('Recursion error in line', null, $this->lastLineError);
+            }
             // If we can't handle graceful
             throw new LineParseError('Unknown parse error.', null);
         }
+        $this->lastLineError = null;
+        $this->lineErrorCounts = 0;
 
         $simpleXMLElement = simplexml_import_dom($this->doc->importNode($node, true));
 
